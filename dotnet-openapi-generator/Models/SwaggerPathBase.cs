@@ -91,8 +91,7 @@ internal abstract class SwaggerPathBase
             foreach (var header in headerParams)
             {
                 var safeString = header.name.AsSafeString();
-                var type = header.schema.ResolveType() ?? "";
-
+                var type = header.schema.ResolveType();
                 if (type.StartsWith(typeof(List<>).FullName![..^2]))
                 {
                     safeString = "System.Linq.Enumerable.Select(" + safeString + ", x => \"\" + x)";

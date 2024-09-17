@@ -6,11 +6,13 @@ internal class SwaggerSchemaProperty
 {
     [System.Text.Json.Serialization.JsonPropertyName("$ref")]
     public string? @ref { get; set; }
-    public string? type { get; set; }
+    public SwaggerSchemaType? type { get; set; }
     public string? format { get; set; }
     public object? @default { get; set; }
     public bool nullable { get; set; }
     //public bool? required { get; set; }
+
+    [System.Text.Json.Serialization.JsonConverter(typeof(SwaggerSchemaPropertyAdditionalPropertiesConverter))]
     public SwaggerSchemaPropertyAdditionalProperties? additionalProperties { get; set; }
     public System.Text.Json.JsonElement? items { get; set; }
 
@@ -34,12 +36,7 @@ internal class SwaggerSchemaProperty
             builder.Append("required ");
         }
 
-        builder.Append(ResolveType());
-
-        if (nullable)
-        {
-            builder.Append('?');
-        }
+        builder.Append(ResolveType(nullable));
 
         builder.Append(' ');
 
@@ -55,7 +52,20 @@ internal class SwaggerSchemaProperty
         return builder.ToString().TrimEnd();
     }
 
-    public string? ResolveType()
+    public string ResolveType(bool nullable = false)
+    {
+        var rt = ResolveTypeRaw(ref nullable);
+        return ApplyNullable(rt, nullable) ?? "";
+    }
+
+    static string? ApplyNullable(string? type, bool nullable)
+    {
+        if (type is not null && nullable)
+            type = $"{type}?";
+        return type;
+    }
+
+    string? ResolveTypeRaw(ref bool nullable)
     {
         if (format is not null)
         {
@@ -66,13 +76,41 @@ internal class SwaggerSchemaProperty
             }
         }
 
-        return (type ?? @ref).ResolveType(items, additionalProperties);
+        var r = (ResolveSimpleType(out var withNull) ?? @ref).ResolveType(items, additionalProperties);
+        nullable |= withNull;
+        return r;
+    }
+
+    string? ResolveSimpleType(out bool nullable)
+    {
+        nullable = false;
+        if (type is null || type.Types.Count == 0)
+            return null;
+
+        var types = type.Types;
+        if (types.Count > 1)
+        {
+            types = types.FindAll(t => t != "null");
+            nullable = true;
+        }
+
+        if (types.Count == 1)
+            return types[0];
+
+        if (types.Count == 2 && types.Contains("string") && types.Contains("number"))
+        {
+            Logger.LogWarning("Type with string or number changed to string.");
+            return "string";
+        }
+
+        throw new InvalidOperationException($"Not a simple type {string.Join(", ", type.Types)}");
     }
 
     public IEnumerable<string> GetComponents(IReadOnlyDictionary<string, SwaggerSchema> schemas, int depth)
     {
-        string? resolvedType = format == "array" || type == "array"
-                                ? items.ResolveArrayType(additionalProperties)
+        var nullable = false;
+        string? resolvedType = format == "array" || ResolveSimpleType(out nullable) == "array"
+                                ? ApplyNullable(items.ResolveArrayType(additionalProperties), nullable)
                                 : ResolveType();
 
         if (!string.IsNullOrWhiteSpace(resolvedType))
