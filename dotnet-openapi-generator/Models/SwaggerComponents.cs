@@ -72,14 +72,14 @@ namespace {@namespace}.Clients;
         + $@"
 }}";
 
-                await File.WriteAllTextAsync(Path.Combine(path, "../Clients/__JsonSerializerContext.cs"), template, token);
+                await Lib.EnsureTextWritten(Path.Combine(path, "../Clients/__JsonSerializerContext.cs"), template, token);
             }
         }
     }
 
     private static async Task GenerateInternals(string path, string @namespace, CancellationToken token)
     {
-        await File.WriteAllTextAsync(Path.Combine(path, "__ICanIterate.cs"), Constants.Header + $@"namespace {@namespace}.Models;
+        await Lib.EnsureTextWritten(Path.Combine(path, "__ICanIterate.cs"), Constants.Header + $@"namespace {@namespace}.Models;
 
 [System.CodeDom.Compiler.GeneratedCode(""dotnet-openapi-generator"", ""{Constants.ProductVersion}"")]
 internal interface __ICanIterate

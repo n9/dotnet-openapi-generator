@@ -86,7 +86,7 @@ internal class SwaggerDocument
         }
 #endif
 
-        return File.WriteAllTextAsync(file, @$"<Project Sdk=""Microsoft.NET.Sdk"">
+        return Lib.EnsureTextWritten(file, @$"<Project Sdk=""Microsoft.NET.Sdk"">
 
   <PropertyGroup>
     <TargetFramework>net{targetframework}{netVersion.Major}.{netVersion.Minor}</TargetFramework>
@@ -149,7 +149,7 @@ internal class __TokenCache : ITokenCache
             }
         }
 
-        return File.WriteAllTextAsync(file, Constants.Header + $@"namespace {options.Namespace}.Clients;{additionalHelpers}
+        return Lib.EnsureTextWritten(file, Constants.Header + $@"namespace {options.Namespace}.Clients;{additionalHelpers}
 
 [System.CodeDom.Compiler.GeneratedCode(""dotnet-openapi-generator"", ""{Constants.ProductVersion}"")]
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

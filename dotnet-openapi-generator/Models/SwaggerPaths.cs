@@ -220,7 +220,7 @@ internal class SwaggerPaths : Dictionary<string, SwaggerPath>
             }
         }
 
-        await File.WriteAllTextAsync(Path.Combine(path, "..", "Registrations.cs"), Constants.Header + $@"using Microsoft.Extensions.DependencyInjection;
+        await Lib.EnsureTextWritten(Path.Combine(path, "..", "Registrations.cs"), Constants.Header + $@"using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using {@namespace}.Clients;
 
@@ -392,7 +392,7 @@ namespace {@namespace}.Clients;
 ";
             }
 
-            await File.WriteAllTextAsync(fileName, template, token);
+            await Lib.EnsureTextWritten(fileName, template, token);
 
             string GetBody()
             {
@@ -523,7 +523,7 @@ namespace {@namespace}.Clients;
             await GenerateStringBuilderPool(path, @namespace, stringBuilderPoolSize, token);
         }
 
-        await File.WriteAllTextAsync(Path.Combine(path, "__QueryBuilder.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
+        await Lib.EnsureTextWritten(Path.Combine(path, "__QueryBuilder.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
 
 [System.CodeDom.Compiler.GeneratedCode(""dotnet-openapi-generator"", ""{Constants.ProductVersion}"")]
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -595,7 +595,7 @@ internal struct __QueryBuilder
 
     private static Task GenerateStringBuilderPool(string path, string @namespace, int stringBuilderPoolSize, CancellationToken token)
     {
-        return File.WriteAllTextAsync(Path.Combine(path, "__StringBuilderPool.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
+        return Lib.EnsureTextWritten(Path.Combine(path, "__StringBuilderPool.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
 
 [System.CodeDom.Compiler.GeneratedCode(""dotnet-openapi-generator"", ""{Constants.ProductVersion}"")]
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -669,7 +669,7 @@ internal static class __StringBuilderPool
         }
 #endif
 
-        await File.WriteAllTextAsync(Path.Combine(path, "__ClientOptions.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
+        await Lib.EnsureTextWritten(Path.Combine(path, "__ClientOptions.cs"), Constants.Header + $@"namespace {@namespace}.Clients;
 
 [System.CodeDom.Compiler.GeneratedCode(""dotnet-openapi-generator"", ""{Constants.ProductVersion}"")]
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

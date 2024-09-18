@@ -197,7 +197,7 @@ internal class SwaggerSchema
 {GetBody(name, supportRequiredProperties, jsonPropertyNameAttribute, schemas, modifier)}
 }}
 ";
-        return File.WriteAllTextAsync(fileName, template, token);
+        return Lib.EnsureTextWritten(fileName, template, token);
     }
 
     public IEnumerable<string> GetComponents(IReadOnlyDictionary<string, SwaggerSchema> schemas, int depth)

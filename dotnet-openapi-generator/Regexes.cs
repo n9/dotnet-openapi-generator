@@ -4,8 +4,8 @@ namespace dotnet.openapi.generator;
 
 internal static partial class Regexes
 {
-    [GeneratedRegex(@"[`\[\], \+\/\\\{\}\-]", RegexOptions.Compiled, 1000)] public static partial Regex SafeString();
-    [GeneratedRegex(@"[`\[\], \+\/\\\{\}\-\.]", RegexOptions.Compiled, 1000)] public static partial Regex SafeStringWithoutDots();
+    [GeneratedRegex(@"[`\[\], :\+\/\\\{\}\-]", RegexOptions.Compiled, 1000)] public static partial Regex SafeString();
+    [GeneratedRegex(@"[`\[\], :\+\/\\\{\}\-\.]", RegexOptions.Compiled, 1000)] public static partial Regex SafeStringWithoutDots();
     [GeneratedRegex(@"_{2,}", RegexOptions.Compiled, 1000)] public static partial Regex MultiUnderscore();
     [GeneratedRegex(@"^(?<genericType>.+)`\d+(?<typeinfo>\[\[(?<type>.+?), .+?, Version=\d+.\d+.\d+.\d+, Culture=.+?, PublicKeyToken=.+?\]\])$", RegexOptions.Compiled, 1000)] public static partial Regex FullnameType();
     [GeneratedRegex(@"(System\.Collections\.Generic\.List<|System\.Collections\.Generic\.Dictionary<string, )(?<actualComponent>\w+)>", RegexOptions.Compiled, 1000)] public static partial Regex FindActualComponent();
@@ -25,9 +25,9 @@ internal sealed class GeneratedRegexAttribute : Attribute
 
 static partial class Regexes
 {
-    private static readonly Regex s_SafeString = new(@"[`\[\], \+\/\\\{\}\-]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
+    private static readonly Regex s_SafeString = new(@"[`\[\], :\+\/\\\{\}\-]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
     public static partial Regex SafeString() => s_SafeString;
-    private static readonly Regex s_SafeStringWithoutDots = new(@"[`\[\], \+\/\\\{\}\-\.]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
+    private static readonly Regex s_SafeStringWithoutDots = new(@"[`\[\], :\+\/\\\{\}\-\.]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
     public static partial Regex SafeStringWithoutDots() => s_SafeStringWithoutDots;
     private static readonly Regex s_MultiUnderscore = new(@"_{2,}", RegexOptions.Compiled, TimeSpan.FromMilliseconds(1000));
     public static partial Regex MultiUnderscore() => s_MultiUnderscore;

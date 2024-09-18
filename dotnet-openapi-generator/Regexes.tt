@@ -6,7 +6,7 @@
 <#@ output extension=".cs" #>
 <#
 
-const string pattern = @"[`\[\], \+\/\\\{\}\-";
+const string pattern = @"[`\[\], :\+\/\\\{\}\-";
 
 Dictionary<string, string> patterns = new()
 {
